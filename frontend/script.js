@@ -30,7 +30,7 @@ async function analyzeResume() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:5000/analyze",
+            "https://ai-resume-analyzer-75gi.onrender.com/analyze",
             {
                 method: "POST",
                 body: formData
@@ -240,7 +240,7 @@ async function checkJobMatch() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:5000/job-match",
+            "https://ai-resume-analyzer-75gi.onrender.com/job-match",
             {
 
                 method: "POST",
