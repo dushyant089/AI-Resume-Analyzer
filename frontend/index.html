@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Resume Analyzer</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+    <header class="navbar">
+
+        <div class="logo">
+            🤖 AI Resume Analyzer
+        </div>
+
+        <span class="status">
+            ● AI Powered
+        </span>
+
+    </header>
+
+
+    <main class="container">
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <h1>
+                Analyze Your Resume
+                <span>with AI</span>
+            </h1>
+
+            <p>
+                Upload your resume and discover your
+                resume score, skills, job match and
+                improvement suggestions.
+            </p>
+
+        </section>
+
+
+        <!-- RESUME UPLOAD -->
+
+        <section class="card upload-card">
+
+            <h2>📄 Upload Your Resume</h2>
+
+            <p>
+                Supported formats: PDF and DOCX
+            </p>
+
+
+            <input
+                type="file"
+                id="resumeFile"
+                accept=".pdf,.docx"
+            >
+
+
+            <button
+                onclick="analyzeResume()"
+                class="primary-btn"
+            >
+                🚀 Analyze Resume
+            </button>
+
+        </section>
+
+
+        <!-- ANALYSIS RESULT -->
+
+        <section class="card">
+
+            <h2>📊 Analysis Result</h2>
+
+            <div id="message">
+
+                <p class="empty">
+                    Upload your resume to start analysis.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- JOB MATCHER -->
+
+        <section class="card job-section">
+
+            <h2>🎯 Job Description Matcher</h2>
+
+            <p>
+                Paste a job description to check how well
+                your resume matches the job.
+            </p>
+
+
+            <textarea
+                id="jobDescription"
+                rows="8"
+                placeholder="Paste job description here..."
+            ></textarea>
+
+
+            <button
+                onclick="checkJobMatch()"
+                class="primary-btn"
+            >
+                🔍 Check Job Match
+            </button>
+
+
+            <div id="jobMatchResult">
+
+            </div>
+
+        </section>
+
+
+        <!-- FEATURES -->
+
+        <section class="features">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📊
+                </div>
+
+                <h3>
+                    Resume Score
+                </h3>
+
+                <p>
+                    Get a score based on important
+                    resume sections.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🎯
+                </div>
+
+                <h3>
+                    Job Matching
+                </h3>
+
+                <p>
+                    Compare your skills with a
+                    target job description.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    💡
+                </div>
+
+                <h3>
+                    AI Suggestions
+                </h3>
+
+                <p>
+                    Discover missing skills and
+                    improve your resume.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            © 2026 AI Resume Analyzer
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
