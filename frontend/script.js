@@ -1,4 +1,7 @@
+const API_URL = "https://ai-resume-analyzer-75gi.onrender.com";
+
 let resumeSkills = [];
+window.resumeScore = 0;
 
 
 // =========================================
@@ -27,92 +30,92 @@ async function analyzeResume() {
     message.innerHTML =
         "⏳ Analyzing your resume...";
 
+
     try {
 
         const response = await fetch(
-            "https://ai-resume-analyzer-75gi.onrender.com/analyze",
+            `${API_URL}/analyze`,
             {
                 method: "POST",
                 body: formData
             }
         );
 
+
         const data = await response.json();
+
 
         if (!response.ok) {
 
             message.innerHTML =
-                "❌ " + (data.error || "Something went wrong.");
+                "❌ " +
+                (data.error || "Something went wrong.");
 
             return;
         }
 
 
-        // Save skills for Job Matcher
+        // Save skills
         resumeSkills = data.skills || [];
 
 
-        // Save resume score
-        window.resumeScore = data.score
-            ? data.score.total
-            : 0;
+        // Save score
+        window.resumeScore =
+            data.score
+                ? data.score.total
+                : 0;
 
 
-        const contact = data.contact || {};
+        const contact =
+            data.contact || {};
 
 
-        const score = data.score || {
+        const score =
+            data.score || {
 
-            total: 0,
-            contact: 0,
-            education: 0,
-            skills: 0,
-            experience: 0,
-            projects: 0,
-            objective: 0
+                total: 0,
+                contact: 0,
+                education: 0,
+                skills: 0,
+                experience: 0,
+                projects: 0,
+                objective: 0
 
-        };
+            };
 
 
         message.innerHTML = `
 
             <h3>✅ Resume Analyzed</h3>
 
-
             <p>
                 <strong>Name:</strong>
                 ${contact.name || "Not detected"}
             </p>
-
 
             <p>
                 <strong>Email:</strong>
                 ${contact.email || "Not detected"}
             </p>
 
-
             <p>
                 <strong>Phone:</strong>
                 ${contact.phone || "Not detected"}
             </p>
 
-
             <p>
                 <strong>Skills:</strong>
-
                 ${
-                    data.skills && data.skills.length
+                    data.skills &&
+                    data.skills.length
 
                         ? data.skills.join(", ")
 
                         : "No skills detected"
                 }
-
             </p>
 
-
             <hr>
-
 
             <h3>🎯 Resume Score</h3>
 
@@ -120,67 +123,59 @@ async function analyzeResume() {
 
             <h3>💡 Resume Improvement Suggestions</h3>
 
-<ul>
+            <ul>
 
-    ${
-        data.improvements &&
-        data.improvements.length
+                ${
+                    data.improvements &&
+                    data.improvements.length
 
-            ? data.improvements
-                .map(
-                    item => `<li>${item}</li>`
-                )
-                .join("")
+                        ? data.improvements
+                            .map(
+                                item =>
+                                    `<li>${item}</li>`
+                            )
+                            .join("")
 
-            : "<li>No major improvements needed.</li>"
-    }
+                        : "<li>No major improvements needed.</li>"
+                }
 
-</ul>
-
+            </ul>
 
             <p>
                 Contact Information:
                 ${score.contact}/10
             </p>
 
-
             <p>
                 Education:
                 ${score.education}/20
             </p>
-
 
             <p>
                 Skills:
                 ${score.skills}/20
             </p>
 
-
             <p>
                 Experience:
                 ${score.experience}/20
             </p>
-
 
             <p>
                 Projects:
                 ${score.projects}/20
             </p>
 
-
             <p>
                 Objective:
                 ${score.objective}/10
             </p>
 
-
             <hr>
-
 
             <h3>📄 Extracted Resume Text</h3>
 
-
-            <pre>${data.text}</pre>
+            <pre>${data.text || "No text extracted."}</pre>
 
         `;
 
@@ -213,7 +208,6 @@ async function checkJobMatch() {
         document.getElementById("jobMatchResult");
 
 
-    // Check job description
     if (!jobDescription.trim()) {
 
         result.innerHTML =
@@ -223,7 +217,6 @@ async function checkJobMatch() {
     }
 
 
-    // Check resume
     if (!resumeSkills.length) {
 
         result.innerHTML =
@@ -240,7 +233,7 @@ async function checkJobMatch() {
     try {
 
         const response = await fetch(
-            "https://ai-resume-analyzer-75gi.onrender.com/job-match",
+            `${API_URL}/job-match`,
             {
 
                 method: "POST",
@@ -264,7 +257,8 @@ async function checkJobMatch() {
         );
 
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
 
         if (!response.ok) {
@@ -288,17 +282,13 @@ async function checkJobMatch() {
 
             <hr>
 
-
             <h3>🎯 Job Match</h3>
 
-
             <h2>
-                ${data.match_percentage}%
+                ${data.match_percentage || 0}%
             </h2>
 
-
             <h4>✅ Matched Skills</h4>
-
 
             <p>
 
@@ -315,7 +305,6 @@ async function checkJobMatch() {
 
 
             <h4>❌ Missing Skills</h4>
-
 
             <p>
 
@@ -335,7 +324,6 @@ async function checkJobMatch() {
 
 
             <h3>🤖 AI Recommendations</h3>
-
 
             <ul>
 
