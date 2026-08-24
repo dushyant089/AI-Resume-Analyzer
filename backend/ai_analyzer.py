@@ -1,20 +1,20 @@
 import os
 import json
-from openai import OpenAI
+from google import genai
 
 
 # =========================================================
-# OPENAI CLIENT
+# GEMINI CLIENT
 # =========================================================
 
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("GEMINI_API_KEY")
 
 if not api_key:
     raise RuntimeError(
-        "OPENAI_API_KEY environment variable is missing."
+        "GEMINI_API_KEY environment variable is missing."
     )
 
-client = OpenAI(api_key=api_key)
+client = genai.Client(api_key=api_key)
 
 
 # =========================================================
@@ -108,48 +108,41 @@ Return exactly this JSON structure:
     try:
 
         print("\n====================================")
-        print("CALLING OPENAI...")
+        print("CALLING GEMINI AI...")
         print("====================================")
 
-        response = client.chat.completions.create(
-
-            model="gpt-4o-mini",
-
-            messages=[
-
-                {
-                    "role": "system",
-                    "content":
-                    "You are a professional resume analyzer. "
-                    "Return accurate personalized JSON only."
-                },
-
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-
-            ],
-
-            response_format={
-                "type": "json_object"
-            },
-
-            temperature=0.4,
-
-            max_tokens=2500
+        response = client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=prompt
         )
 
-        content = response.choices[0].message.content
+        content = response.text
 
         if not content:
             raise RuntimeError(
-                "OpenAI returned an empty response."
+                "Gemini returned an empty response."
             )
 
         print("\n====================================")
-        print("OPENAI RESPONSE RECEIVED")
+        print("GEMINI RESPONSE RECEIVED")
         print("====================================")
+
+        # -------------------------------------------------
+        # Remove Markdown JSON fences if Gemini adds them
+        # -------------------------------------------------
+
+        content = content.strip()
+
+        if content.startswith("```json"):
+            content = content[7:]
+
+        elif content.startswith("```"):
+            content = content[3:]
+
+        if content.endswith("```"):
+            content = content[:-3]
+
+        content = content.strip()
 
         # -------------------------------------------------
         # Validate JSON
@@ -162,9 +155,11 @@ Return exactly this JSON structure:
         except json.JSONDecodeError as json_error:
 
             print("JSON PARSE ERROR:", json_error)
+            print("GEMINI RAW RESPONSE:")
+            print(content)
 
             raise RuntimeError(
-                "OpenAI returned invalid JSON."
+                "Gemini returned invalid JSON."
             )
 
         # -------------------------------------------------
@@ -196,7 +191,6 @@ Return exactly this JSON structure:
         for key, default_value in default_response.items():
 
             if key not in parsed:
-
                 parsed[key] = default_value
 
         # -------------------------------------------------
@@ -218,7 +212,6 @@ Return exactly this JSON structure:
         for field in array_fields:
 
             if not isinstance(parsed[field], list):
-
                 parsed[field] = []
 
         # -------------------------------------------------
@@ -226,12 +219,18 @@ Return exactly this JSON structure:
         # -------------------------------------------------
 
         if not isinstance(parsed["summary"], str):
-            parsed["summary"] = str(parsed["summary"])
+            parsed["summary"] = str(
+                parsed["summary"]
+            )
 
         if not isinstance(parsed["ats_analysis"], str):
             parsed["ats_analysis"] = str(
                 parsed["ats_analysis"]
             )
+
+        # -------------------------------------------------
+        # Debug information
+        # -------------------------------------------------
 
         print("\nAI ANALYSIS READY")
 
@@ -277,18 +276,15 @@ Return exactly this JSON structure:
 
         print("====================================\n")
 
-        # Return dictionary directly
         return parsed
 
     except Exception as error:
 
         print("\n====================================")
-        print("OPENAI ERROR")
+        print("GEMINI AI ERROR")
         print("====================================")
 
-        print(
-            repr(error)
-        )
+        print(repr(error))
 
         print("====================================\n")
 
