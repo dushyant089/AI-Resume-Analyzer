@@ -330,7 +330,7 @@ def analyze_resume():
         # AI ANALYSIS
         # -------------------------------------------------
 
-        print("Calling OpenAI AI analysis...")
+        print("Calling Gemini for job analysis...")
 
         ai_analysis = {}
 
