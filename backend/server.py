@@ -419,6 +419,10 @@ def analyze_resume():
 # JOB MATCH
 # =========================================================
 
+# =========================================================
+# JOB MATCH
+# =========================================================
+
 @app.route("/job-match", methods=["POST"])
 def job_match():
 
@@ -492,7 +496,7 @@ def job_match():
 
 
         # -------------------------------------------------
-        # AI JOB ANALYSIS
+        # GEMINI AI JOB ANALYSIS
         # -------------------------------------------------
 
         ai_analysis = {}
@@ -500,7 +504,7 @@ def job_match():
         if isinstance(resume_text, str) and resume_text.strip():
 
             print(
-                "Calling OpenAI for job analysis..."
+                "Calling Gemini for job analysis..."
             )
 
             try:
@@ -510,18 +514,15 @@ def job_match():
                     job_description=job_description
                 )
 
-                ai_analysis = parse_ai_response(
-                    ai_result
-                )
 
                 print(
-                    "AI job analysis completed."
+                    "Gemini job analysis completed."
                 )
 
             except Exception as ai_error:
 
                 print(
-                    "AI JOB ANALYSIS ERROR:"
+                    "GEMINI JOB ANALYSIS ERROR:"
                 )
 
                 print(
